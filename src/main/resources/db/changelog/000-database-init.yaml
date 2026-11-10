@@ -1,0 +1,233 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Don
+      changes:
+        - createTable:
+            tableName: teams
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: team_url
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: team_name
+                  type: Varchar(20)
+                  defaultValue: "Mannschaft"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mini
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dbv_link
+                  type: TEXT
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
+
+        - createTable:
+            tableName: games
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: team_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: game_ordinal
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: game_time
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_game_time
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: host
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: guest
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: score
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: match_link
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location_link
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: players
+            columns:
+              - column:
+                  name: game_id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: TEXT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: man
+                  type: BOOLEAN
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: replacement
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+        - createTable:
+            tableName: detail_scores
+            columns:
+              - column:
+                  name: game_id
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: ordinal
+                  type: INTEGER
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: game_type
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: host_player
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: guest_player
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sets
+                  type: TEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: comments
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: game_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: creation_date
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: game_dates
+            columns:
+              - column:
+                  name: id
+                  type: INTEGER
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: game_id
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: game_time
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approved
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+
+
+
+
+
+

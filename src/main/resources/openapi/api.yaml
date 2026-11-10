@@ -1,0 +1,314 @@
+openapi: 3.0.3
+
+info:
+  title: Team API
+  version: 1.0.0
+
+
+paths:
+  /{team}/api/gameinfo:
+    get:
+      operationId: getGames
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GameInfo'
+
+  /{team}/api/teaminfo:
+    get:
+      operationId: getTeamInfo
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeamInfo"
+  /{team}/api/players:
+    get:
+      operationId: getPlayers
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerInfo"
+    post:
+      operationId: addPlayer
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                man:
+                  type: boolean
+                maybe:
+                  type: boolean
+                gameIndex:
+                  type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerInfo"
+    delete:
+      operationId: removePlayer
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                man:
+                  type: boolean
+                gameIndex:
+                  type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlayerInfo"
+  /{team}/api/game-dates:
+    get:
+      operationId: getGameDates
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                    - $ref: "#/components/schemas/GameDateInfo"
+  /{team}/api/game-dates/{gameIndex}:
+    post:
+      operationId: changeDate
+      parameters:
+        - $ref: "#/components/parameters/Team"
+        - in: path
+          name: gameIndex
+          required: true
+          description: Identifier of the game.
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                    - $ref: "#/components/schemas/GameDateInfo"
+  /{team}/api/game-dates/approvals/{gameIndex}:
+    post:
+      operationId: approveDate
+      parameters:
+        - $ref: "#/components/parameters/Team"
+        - in: path
+          name: gameIndex
+          required: true
+          description: Identifier of the game.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                    - $ref: "#/components/schemas/GameDateInfo"
+
+  /{team}/api/calendar.ics:
+    get:
+      operationId: getCalendar
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        '200':
+          description: iCalendar mit den Spielen des Teams
+          headers:
+            Content-Disposition:
+              description: Gibt den Dateinamen des Kalenders an.
+              schema:
+                type: string
+                example: inline; filename="events.ics"
+          content:
+            text/calendar:
+              schema:
+                type: string
+
+
+
+
+components:
+  schemas:
+    GameInfo:
+      type: object
+      properties:
+        time:
+          type: string
+          example: "2026-09-12T11:00:00.000Z"
+        originalTime:
+          type: string
+          example: "2026-09-12T13:00:00.000Z"
+        host:
+          type: string
+          example: "SSV WBG Bochum M2"
+        guest:
+          type: string
+          example: "TG Bochum 1884 M3"
+        matchLink:
+          type: string
+        score:
+          type: string
+          example: "?-?"
+        location:
+          type: string
+          example: "44894 Bochum-Werne, 3-fach TH Willy-Brandt-Gesamtschule, Deutsches Reich 58"
+        locationLink:
+          type: string
+          example: "https://dbv.turnier.de/sport/./location.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&lid=456"
+        detailScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameDetailScore'
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Comment'
+
+    GameDetailScore:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "HD1"
+        hostPlayer:
+          type: array
+          items:
+            type: string
+          example: "Max Mustermann"
+        guestPlayer:
+          type: array
+          items:
+            type: string
+          example: "Max Mustermann"
+        sets:
+          type: array
+          items:
+            type: string
+            example: "21-5"
+
+    Comment:
+      type: object
+      properties:
+        author:
+          type: string
+          example: "TG Bochum"
+        text:
+          type: string
+          example: "Verlegung nach ..."
+        timeOfCreation:
+          type: string
+          example: "2026-07-10T11:29:00.000Z"
+
+    TeamInfo:
+      type: object
+      properties:
+        teamName:
+          type: string
+          example: "Erwachsene 1"
+        teamUrl:
+          type: string
+          example: "J1"
+        mini:
+          type: boolean
+          example: false
+
+    PlayerInfo:
+      type: object
+      properties:
+        registeredMans:
+          type: array
+          items:
+            type: string
+        registeredMaybeMans:
+          type: array
+          items:
+            type: string
+        registeredWoman:
+          type: array
+          items:
+            type: string
+        registeredMaybeWoman:
+          type: array
+          items:
+            type: string
+    GameDateInfo:
+      type: object
+      properties:
+        time:
+          type: string
+        approved:
+          type: boolean
+  parameters:
+    Team:
+      name: team
+      in: path
+      required: true
+      description: Identifier of the team.
+      schema:
+        type: string

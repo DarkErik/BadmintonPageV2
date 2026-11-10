@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: BadmintonBackend
+  datasource:
+    url: jdbc:sqlite:./data/app.db
+    driver-class-name: org.sqlite.JDBC
+
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml

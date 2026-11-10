@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: 000-database-init.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 999-team-config.yaml
+      relativeToChangelogFile: true

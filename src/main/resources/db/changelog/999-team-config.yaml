@@ -1,0 +1,17 @@
+databaseChangeLog: # ("1", "Erwachsene 1", false, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=361"),
+  - changeSet:
+      id: 999-insert-teams
+      author: Don
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO teams (team_url, team_name, mini, dbv_link)
+              VALUES
+                ("1", "Erwachsene 1", false, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=361"),
+                ("2", "Erwachsene 2", false, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=401"),
+                ("j1", "Jugend 1", false, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=1119"),
+                ("m1", "Mini 1", true, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=1155"),
+                ("m2", "Mini 2", true, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=1118"),
+                ("m3", "Mini 3", true, "https://dbv.turnier.de/sport/teammatches.aspx?id=D6F7A756-39F3-4CB4-8F27-0E30E0421F4A&tid=1194");
+              
+              
