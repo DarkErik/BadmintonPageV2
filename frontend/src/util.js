@@ -2,7 +2,7 @@ import { ref } from 'vue';
 
 export function getURL(postfix) {
     if (import.meta.env.DEV) {
-        return "http://localhost:8080/m1/" + postfix;
+        return "http://localhost:8080/2/" + postfix;
         return "https://tg.dondevelops.de/2/" + postfix;
     }
     return "./" + postfix;

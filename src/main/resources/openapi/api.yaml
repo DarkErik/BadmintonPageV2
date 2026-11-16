@@ -170,6 +170,21 @@ paths:
                   nullable: true
                   allOf:
                     - $ref: "#/components/schemas/GameDateInfo"
+  /{team}/api/standings:
+    get:
+      operationId: getStandings
+      parameters:
+        - $ref: "#/components/parameters/Team"
+      responses:
+        '200':
+          description: Returns the standings in this league
+          content:
+            application/json:
+              schema:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/StandingEntry"
+
 
   /{team}/api/calendar.ics:
     get:
@@ -304,6 +319,20 @@ components:
           type: string
         approved:
           type: boolean
+    StandingEntry:
+      type: object
+      properties:
+        displayRank:
+          type: integer
+        clubName:
+          type: string
+        playedGames:
+          type: integer
+        wonPoints:
+          type: integer
+        lostPoints:
+          type: integer
+
   parameters:
     Team:
       name: team

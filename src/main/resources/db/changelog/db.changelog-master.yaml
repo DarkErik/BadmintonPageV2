@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file: 999-team-config.yaml
       relativeToChangelogFile: true
+  - include:
+      file: 001-add-standing-table.yaml
+      relativeToChangelogFile: true

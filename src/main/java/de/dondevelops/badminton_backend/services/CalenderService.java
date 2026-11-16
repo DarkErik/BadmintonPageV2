@@ -30,6 +30,11 @@ public class CalenderService {
         lines.add("VERSION:2.0");
         lines.add("PRODID:TG Bochum");
         lines.add("CALSCALE:GREGORIAN");
+        lines.add("METHOD:PUBLISH");
+        lines.add("X-WR-CALNAME:TG Bochum 1884");
+        lines.add("X-WR-TIMEZONE:Europe/Berlin");
+        lines.add("X-WR-CALDESC:Spielplan TG Bochum 1884");
+
 
         List<GameDto> games = gameService.getGamesByTeam(teamId);
 
@@ -52,6 +57,8 @@ public class CalenderService {
             lines.add("BEGIN:VEVENT");
 
             lines.add("UID:" + md5(game.getMatchLink()) + "@tg.dondevelops.de");
+
+            lines.add("SEQUENCE:" + (System.currentTimeMillis() / 1000L / 60L / 60L));
 
             lines.add("DTSTAMP:" + formatICSDate(game.getOriginalGameTime()));
 

@@ -29,6 +29,7 @@ public class CommentlineTestRunner implements CommandLineRunner {
             for(TeamDto team : gameService.getAllTeams()) {
                 log.info("Scraping for: {}", team.getTeamName());
                 scrapingService.retrieveGames(team.getDbvLink(), cookie, team.getId());
+                scrapingService.retrieveStandings(team, cookie);
             }
         } else{
             log.info("Actually no need!");

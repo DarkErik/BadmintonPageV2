@@ -4,6 +4,7 @@
 
     <div class="p-5">
         <div class="flex flex-col gap-10">
+            <StandingsTile />
             <MatchTableRow v-for="(game, index) in store.games" :key="index" :gameIndx="index"/>
         </div>
     </div>
@@ -11,6 +12,7 @@
 
 <script setup>
     import MatchTableRow from './MatchTableRow.vue'
+    import StandingsTile from './StandingsTile.vue'
     import { useGameInfoStore } from '../stores/gameInfoStore';
     import { usePlayerStore } from '../stores/gamePlayerStore';
     import { useDateStore } from '../stores/gameDateStore.js';

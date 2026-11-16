@@ -1,6 +1,5 @@
 package de.dondevelops.badminton_backend.services;
 
-import com.example.model.Comment;
 import de.dondevelops.badminton_backend.dtos.*;
 import de.dondevelops.badminton_backend.util.DateParser;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +31,7 @@ public class ScrapingService {
     private final RestClient restClient;
     private final GameService gameService;
     private final GameDateService gameDateService;
+    private final StandingsService standingsService;
 
     public String getSessionCookie() {
         String cookieUrl = "https://dbv.turnier.de/cookiewall/?returnurl=%2Fsport%2Fteammatch.aspx%3Fid%3D925D6245-1FA1-496D-9810-1439487E5801%26match%3D4925";
@@ -122,17 +122,18 @@ public class ScrapingService {
             log.info("Scheduled scraping for: {}", team.getTeamName());
             String cookie = getSessionCookie();
             retrieveGames(team.getDbvLink(), cookie, team.getId());
+            retrieveStandings(team, cookie);
 
             Thread.sleep(60 * 60 * 1000);
         }
     }
 
 
-    public boolean retrieveGames(String matchUrl, String cookie, int teamId) {
+    public void retrieveGames(String matchUrl, String cookie, int teamId) {
         Document dom = getWebsiteDom(matchUrl, cookie);
 
         if (dom == null) {
-            return false;
+            return;
         }
 
         Elements gameRows = dom.select("table.ruler.matches > tbody > tr");
@@ -144,14 +145,14 @@ public class ScrapingService {
             Element matchAnchor = cells.get(6).selectFirst("a");
 
             if (matchAnchor == null)
-                return false;
+                return;
 
 
             String matchLink = "https://dbv.turnier.de/sport/" + matchAnchor.attr("href");
             Document matchDom = getWebsiteDom(matchLink, cookie);
 
             if (matchDom == null)
-                return false;
+                return;
 
             GameDto game = gameService.findGameOrEmptyDefault(teamId, gameOrdinal);
 
@@ -171,7 +172,6 @@ public class ScrapingService {
             gameOrdinal++;
         }
 
-        return true;
     }
 
     private void extractDatesFromComments(List<CommentDto> comments, int gameId) {
@@ -372,5 +372,38 @@ public class ScrapingService {
                 DateParser.stringToDate(originalTime);
 
         return new Instant[] {parsedTime, parsedOriginalTime};
+    }
+
+    public void retrieveStandings(TeamDto team, String cookie) {
+        String tableUrl = team.getDbvLink().replace("teammatches", "teamstandings");
+        Document dom = getWebsiteDom(tableUrl, cookie);
+
+        Elements tableRows = dom.select("table.ruler > tbody > tr");
+
+        int oridinal = 0;
+        for(Element tableRow : tableRows) {
+
+            Elements cells = tableRow.select("> td");
+
+            Standing standing = Standing.builder()
+                    .teamId(team.getId())
+                    .ordinal(oridinal++)
+                    .displayedRank(parseIntOrDefault(cells.get(0).text(), -1))
+                    .clubName(cells.get(1).text())
+                    .playedGames(parseIntOrDefault(cells.get(2).text(), -1))
+                    .wonPoints(parseIntOrDefault(cells.get(3).text(), -1))
+                    .lostPoints(parseIntOrDefault(cells.get(5).text(), -1))
+                    .build();
+
+            standingsService.saveStanding(standing);
+        }
+    }
+
+    private int parseIntOrDefault(String text, int defaultInt) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            return defaultInt;
+        }
     }
 }

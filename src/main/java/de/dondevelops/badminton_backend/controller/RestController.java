@@ -5,10 +5,7 @@ import com.example.api.DefaultApi;
 import com.example.model.*;
 import de.dondevelops.badminton_backend.dtos.GameDateDto;
 import de.dondevelops.badminton_backend.dtos.TeamDto;
-import de.dondevelops.badminton_backend.services.CalenderService;
-import de.dondevelops.badminton_backend.services.GameDateService;
-import de.dondevelops.badminton_backend.services.GameService;
-import de.dondevelops.badminton_backend.services.PlayerService;
+import de.dondevelops.badminton_backend.services.*;
 import de.dondevelops.badminton_backend.util.DateParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +24,7 @@ public class RestController implements DefaultApi {
     private final PlayerService playerService;
     private final GameDateService gameDateService;
     private final CalenderService calenderService;
+    private final StandingsService standingsService;
 
     @Override
     public ResponseEntity<TeamInfo> getTeamInfo(String team) {
@@ -105,6 +103,14 @@ public class RestController implements DefaultApi {
             );
 
         return ResponseEntity.ok(gameDateService.getGameDateInfosForTeam(teamDto.getId()));
+    }
+
+    @Override
+    public ResponseEntity<List<StandingEntry>> getStandings(String team) {
+        log.info("Get standings for team: {}", team);
+        TeamDto teamDto = gameService.getTeamByUrl(team).orElseThrow();
+
+        return ResponseEntity.ok(standingsService.getStandingsByTeamOrdered(teamDto.getId()));
     }
 
     @Override
